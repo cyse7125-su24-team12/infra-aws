@@ -135,11 +135,11 @@ variable "eks_node_role" {
 variable "aws_iam_policy_document_eks" {
   type        = any
   description = "IAM Policy Document Configuration"
-  
+
 }
 
 variable "aws_iam_policy_document_eks_node" {
   type        = any
   description = "IAM Policy Document Configuration"
-  
+
 }
