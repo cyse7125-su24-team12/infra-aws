@@ -33,7 +33,6 @@ resource "kubernetes_namespace" "namespace2" {
     name = "namespace2"
   }
 }
-YSai3XGTkY
 
 resource "kubernetes_namespace" "namespace3" {
   depends_on = [module.eks, module.ebs_csi_irsa_role]
