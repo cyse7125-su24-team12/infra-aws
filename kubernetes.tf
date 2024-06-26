@@ -21,7 +21,7 @@ resource "kubernetes_namespace" "namespace1" {
   depends_on = [module.eks, module.ebs_csi_irsa_role]
   provider   = kubernetes.kubernetes-eks
   metadata {
-    name = "namepsace1"
+    name = "namespace1"
   }
 }
 
@@ -30,9 +30,10 @@ resource "kubernetes_namespace" "namespace2" {
   provider   = kubernetes.kubernetes-eks
 
   metadata {
-    name = "namepsace2"
+    name = "namespace2"
   }
 }
+YSai3XGTkY
 
 resource "kubernetes_namespace" "namespace3" {
   depends_on = [module.eks, module.ebs_csi_irsa_role]

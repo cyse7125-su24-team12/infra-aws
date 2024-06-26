@@ -71,3 +71,29 @@ resource "helm_release" "postgresql-ha-release" {
   }
 
 }
+
+resource "helm_release" "kafka" {
+  name       = "kafka"
+  repository = "https://charts.bitnami.com/bitnami"
+  provider   = helm.helm-eks
+  chart      = "kafka"
+  depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3]
+  namespace  = "namespace2"
+
+  set {
+    name  = "provisioning.enabled"
+    value = "true"
+  }
+  set {
+    name  = "provisioning.topics[0].name"
+    value = "cve"
+  }
+  set{
+    name = "provisioning.topics[0].partitions"
+    value = "3"
+  }
+  set{
+    name = "provisioning.topics[0].replicationFactor"
+    value = "3"
+  }
+}
