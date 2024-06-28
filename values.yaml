@@ -1,0 +1,18 @@
+fullnameOverride: "cve-webapp-processor"
+service: 
+  type: "LoadBalancer"
+
+persistance:
+  storageClass: "ebc-sc"
+  size: "4Gi"
+
+postgresql:
+  username: "cve_user"
+  password: "cve123"
+  database: "cve"
+  repmgrUsername: "repmgr"
+  repmgrPassword: "repmgr123"
+
+pgpool:
+  adminUsername: "pgpool"
+  adminPassword: "admin123"

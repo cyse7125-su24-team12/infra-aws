@@ -48,14 +48,14 @@ resource "kubernetes_storage_class" "pvc_sc" {
   depends_on = [aws_kms_key.key_for_ebs_volume, module.eks]
   provider   = kubernetes.kubernetes-eks
   metadata {
-    name = "ebs-sc"
+    name = var.sc_config.name 
   }
-  storage_provisioner = "ebs.csi.aws.com"
-  reclaim_policy      = "Retain"
-  volume_binding_mode = "Immediate"
+  storage_provisioner = var.sc_config.storage_provisioner
+  reclaim_policy      = var.sc_config.reclaim_policy
+  volume_binding_mode = var.sc_config.volume_binding_mode
   parameters = {
-    type      = "gp2"
-    encrypted = "true"
+    type      = var.sc_config.parameters.type
+    encrypted = var.sc_config.parameters.encrypted
     kmsKeyId  = aws_kms_key.key_for_ebs_volume.arn
   }
 }
