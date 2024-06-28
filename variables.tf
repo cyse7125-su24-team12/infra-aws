@@ -172,5 +172,5 @@ variable "namespace3" {
 variable "sc_config" {
   type        = any
   description = "Storage Class Configuration"
-  
+
 }

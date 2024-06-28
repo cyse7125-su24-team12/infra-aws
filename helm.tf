@@ -24,61 +24,61 @@ resource "helm_release" "postgresql-ha-release" {
   }
 
   set {
-    name  = "service.type"
+    name = "service.type"
     # value = "LoadBalancer"
     value = var.postgres_ha.service_type
   }
 
   set {
-    name  = "persistance.storageClass"
+    name = "persistance.storageClass"
     # value = "ebc-sc"
     value = var.postgres_ha.persistance_storageClass
   }
 
-  set{
+  set {
     name = "persistence.size"
     # value = "4Gi"
     value = var.postgres_ha.persistence_size
   }
 
-  set{
+  set {
     name = "postgresql.database"
     # value = "cve"
     value = var.postgres_ha.postgresql_database
   }
 
-  set{
+  set {
     name = "postgresql.username"
     # value = "cve_user"
     value = var.postgres_ha.postgresql_username
   }
 
-  set{
+  set {
     name = "postgresql.password"
     # value = "cve123"
     value = var.postgres_ha.postgresql_password
   }
 
-  set{
+  set {
     name = "postgresql.repmgrUsername"
     # value = "repmgr"
     value = var.postgres_ha.postgresql_repmgrUsername
   }
 
-  set{
+  set {
     name = "postgresql.repmgrPassword"
     # value = "repmgr123"
     value = var.postgres_ha.postgresql_repmgrPassword
   }
 
-  set{
+  set {
     name = "pgpool.adminPassword"
     # value = "admin123"
     value = var.postgres_ha.pgpool_adminPassword
   }
 
 
-  set{
+  set {
     name = "pgpool.adminUsername"
     # value = "pgadmin"
     value = var.postgres_ha.pgpool_adminUsername
@@ -103,12 +103,12 @@ resource "helm_release" "kafka" {
     value = var.kafka_config.topicName
   }
   set {
-    name  = "provisioning.topics[0].partitions"
+    name = "provisioning.topics[0].partitions"
     # value = "3"
     value = var.kafka_config.topicPartitions
   }
   set {
-    name  = "provisioning.topics[0].replicationFactor"
+    name = "provisioning.topics[0].replicationFactor"
     # value = "3"
     value = var.kafka_config.topicPartitions
   }
