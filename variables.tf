@@ -143,3 +143,34 @@ variable "aws_iam_policy_document_eks_node" {
   description = "IAM Policy Document Configuration"
 
 }
+
+variable "postgres_ha" {
+  type        = any
+  description = "Postgres HA Configuration"
+}
+
+variable "kafka_config" {
+  type        = any
+  description = "Kafka Configuration"
+}
+
+variable "namespace1" {
+  type        = string
+  description = "Namespace 1 Configuration"
+}
+
+variable "namespace2" {
+  type        = string
+  description = "Namespace 1 Configuration"
+}
+
+variable "namespace3" {
+  type        = string
+  description = "Namespace 1 Configuration"
+}
+
+variable "sc_config" {
+  type        = any
+  description = "Storage Class Configuration"
+  
+}
