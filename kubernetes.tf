@@ -25,12 +25,56 @@ resource "kubernetes_namespace" "namespace1" {
   }
 }
 
+resource "kubernetes_limit_range" "namespace1_limits" {
+  depends_on = [kubernetes_namespace.namespace1]
+  provider = kubernetes.kubernetes-eks
+  metadata {
+    name      = "default-limits"
+    namespace = kubernetes_namespace.namespace1.metadata[0].name
+  }
+  spec {
+    limit {
+      default = {
+        cpu    = "1"
+        memory = "512Mi"
+      }
+      default_request = {
+        cpu    = "500m"
+        memory = "256Mi"
+      }
+      type = "Container"
+    }
+  }
+}
+
 resource "kubernetes_namespace" "namespace2" {
   depends_on = [module.eks, module.ebs_csi_irsa_role]
   provider   = kubernetes.kubernetes-eks
 
   metadata {
     name = "namespace2"
+  }
+}
+
+resource "kubernetes_limit_range" "namespace2_limits" {
+  depends_on = [kubernetes_namespace.namespace2]
+  provider = kubernetes.kubernetes-eks
+  metadata {
+    name      = "default-limits"
+    namespace = kubernetes_namespace.namespace2.metadata[0].name
+  }
+  spec {
+    limit {
+      default = {
+        cpu    = "1"
+        memory = "512Mi"
+      }
+      default_request = {
+        cpu    = "500m"
+        memory = "256Mi"
+      }
+      type = "Container"
+    }
   }
 }
 
@@ -43,12 +87,25 @@ resource "kubernetes_namespace" "namespace3" {
   }
 }
 
-resource "kubernetes_namespace" "namespace_autoscaler" {
-  depends_on = [module.eks, module.ebs_csi_irsa_role]
-  provider   = kubernetes.kubernetes-eks
-
+resource "kubernetes_limit_range" "namespace3_limits" {
+  depends_on = [kubernetes_namespace.namespace3]
+  provider = kubernetes.kubernetes-eks
   metadata {
-    name = var.namespace_autoscaler
+    name      = "default-limits"
+    namespace = kubernetes_namespace.namespace3.metadata[0].name
+  }
+  spec {
+    limit {
+      default = {
+        cpu    = "1"
+        memory = "512Mi"
+      }
+      default_request ={
+        cpu    = "500m"
+        memory = "256Mi"
+      }
+      type = "Container"
+    }
   }
 }
 
@@ -65,5 +122,14 @@ resource "kubernetes_storage_class" "pvc_sc" {
     type      = var.sc_config.parameters.type
     encrypted = var.sc_config.parameters.encrypted
     kmsKeyId  = aws_kms_key.key_for_ebs_volume.arn
+  }
+}
+
+resource "kubernetes_namespace" "namespace_autoscaler" {
+  depends_on = [module.eks, module.ebs_csi_irsa_role]
+  provider   = kubernetes.kubernetes-eks
+
+  metadata {
+    name = var.namespace_autoscaler
   }
 }
