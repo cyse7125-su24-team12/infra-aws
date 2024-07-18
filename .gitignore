@@ -35,3 +35,6 @@ terraform.rc
 
 # Ignore terraform lock file 
 .terraform.lock.hcl
+
+# ignore network policy
+networkpolicy_db.yaml
