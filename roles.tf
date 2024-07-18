@@ -22,15 +22,15 @@ data "aws_iam_policy_document" "eks_node_assume_role_policy" {
 
 data "aws_iam_policy_document" "eks_autoscaler_policy_doc" {
   statement {
-    actions = var.eks_autoscaler_policy_doc["statement"]["actions"]
+    actions   = var.eks_autoscaler_policy_doc["statement"]["actions"]
     effect    = var.eks_autoscaler_policy_doc["statement"]["effect"]
     resources = var.eks_autoscaler_policy_doc["statement"]["resources"]
   }
 }
 
 resource "aws_iam_policy" "eks_autoscaler_policy" {
-  name        =  var.eks_autoscaler_policy["name"]
-  description =  var.eks_autoscaler_policy["description"]
+  name        = var.eks_autoscaler_policy["name"]
+  description = var.eks_autoscaler_policy["description"]
   policy      = data.aws_iam_policy_document.eks_autoscaler_policy_doc.json
 }
 
