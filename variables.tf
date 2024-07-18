@@ -169,8 +169,31 @@ variable "namespace3" {
   description = "Namespace 1 Configuration"
 }
 
+variable "namespace_autoscaler" {
+  type        = string
+  description = "Namespace Autoscaler Configuration"
+}
+
 variable "sc_config" {
   type        = any
   description = "Storage Class Configuration"
 
+}
+
+variable "kubernetes_autoscaler" {
+  type        = any
+  description = "Kubernetes Autoscaler Configuration"
+  
+}
+
+
+variable "eks_autoscaler_policy_doc" {
+  type        = any
+  description = "EKS Autoscaler Policy Document Configuration"
+  
+}
+
+variable "eks_autoscaler_policy" {
+  type        = any
+  description = "EKS Autoscaler Policy Configuration"
 }
