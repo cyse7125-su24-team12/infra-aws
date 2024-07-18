@@ -43,6 +43,14 @@ resource "kubernetes_namespace" "namespace3" {
   }
 }
 
+resource "kubernetes_namespace" "namespace_autoscaler" {
+  depends_on = [module.eks, module.ebs_csi_irsa_role]
+  provider   = kubernetes.kubernetes-eks
+
+  metadata {
+    name = var.namespace_autoscaler
+  }
+}
 
 resource "kubernetes_storage_class" "pvc_sc" {
   depends_on = [aws_kms_key.key_for_ebs_volume, module.eks]

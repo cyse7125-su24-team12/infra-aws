@@ -7,6 +7,36 @@ provider "helm" {
   alias = "helm-eks"
 }
 
+resource "helm_release" "kubernetes-autoscaler" {
+  name       = "kubernetes-autoscaler"
+  repository = "https://kubernetes.github.io/autoscaler"
+  provider   = helm.helm-eks
+  chart      = "cluster-autoscaler"
+  depends_on = [aws_iam_role.eks_autoscaler_role, kubernetes_namespace.namespace_autoscaler, module.eks]
+  # chart      = "autoscaler/cluster-autoscaler"
+  namespace = var.namespace_autoscaler
+
+  set {
+    name  = "autoDiscovery.clusterName"
+    value = var.kubernetes_autoscaler.cluster_name
+  }
+
+  set {
+    name  = "awsRegion"
+    value = var.kubernetes_autoscaler.aws_region
+  }
+
+  set {
+    name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.eks_autoscaler_role.arn
+  }
+
+  set {
+    name  = "rbac.serviceAccount.name"
+    value = var.kubernetes_autoscaler.service_account_name
+  }
+}
+
 resource "helm_release" "postgresql-ha-release" {
   name       = "postgresql-ha-release"
   repository = "https://charts.bitnami.com/bitnami"
@@ -14,76 +44,9 @@ resource "helm_release" "postgresql-ha-release" {
   chart      = "postgresql-ha"
   depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3]
   namespace  = var.postgres_ha.namespace
-  # values = [
-  #   "${file("values.yaml")}"
-  # ]
-
-  set {
-    name  = "fullnameOverride"
-    value = var.postgres_ha.fullnameOverride
-  }
-
-  set {
-    name = "service.type"
-    # value = "LoadBalancer"
-    value = var.postgres_ha.service_type
-  }
-
-  set {
-    name = "persistance.storageClass"
-    # value = "ebc-sc"
-    value = var.postgres_ha.persistance_storageClass
-  }
-
-  set {
-    name = "persistence.size"
-    # value = "4Gi"
-    value = var.postgres_ha.persistence_size
-  }
-
-  set {
-    name = "postgresql.database"
-    # value = "cve"
-    value = var.postgres_ha.postgresql_database
-  }
-
-  set {
-    name = "postgresql.username"
-    # value = "cve_user"
-    value = var.postgres_ha.postgresql_username
-  }
-
-  set {
-    name = "postgresql.password"
-    # value = "cve123"
-    value = var.postgres_ha.postgresql_password
-  }
-
-  set {
-    name = "postgresql.repmgrUsername"
-    # value = "repmgr"
-    value = var.postgres_ha.postgresql_repmgrUsername
-  }
-
-  set {
-    name = "postgresql.repmgrPassword"
-    # value = "repmgr123"
-    value = var.postgres_ha.postgresql_repmgrPassword
-  }
-
-  set {
-    name = "pgpool.adminPassword"
-    # value = "admin123"
-    value = var.postgres_ha.pgpool_adminPassword
-  }
-
-
-  set {
-    name = "pgpool.adminUsername"
-    # value = "pgadmin"
-    value = var.postgres_ha.pgpool_adminUsername
-  }
-
+  values = [
+    "${file("manifests/values.yaml")}"
+  ]
 }
 
 resource "helm_release" "kafka" {

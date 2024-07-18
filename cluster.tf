@@ -35,6 +35,9 @@ module "eks" {
     }
     vpc-cni = {
       most_recent = var.cluster_eks["cluster_addons"]["vpc-cni"]["most_recent"]
+      configuration_values = jsonencode({
+        enableNetworkPolicy = var.cluster_eks["cluster_addons"]["vpc-cni"]["enable_network_policy"]
+      })
     }
     eks-pod-identity-agent = {
       most_recent = var.cluster_eks["cluster_addons"]["eks-pod-identity-agent"]["most_recent"]
@@ -62,6 +65,9 @@ module "eks" {
       instance_types  = var.cluster_eks["eks_managed_node_groups"]["worker_nodes"]["instance_types"]
       update_config = {
         max_unavailable = var.cluster_eks["eks_managed_node_groups"]["worker_nodes"]["update_config"]["max_unavailable"]
+      }
+      labels = {
+        "nodegroup-name" = var.cluster_eks["eks_managed_node_groups"]["worker_nodes"]["labels"]["nodegroup-name"]
       }
       # node_security_group_id = aws_security_group.eks_cluster_sg.id
     }
