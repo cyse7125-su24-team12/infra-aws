@@ -183,14 +183,14 @@ variable "sc_config" {
 variable "kubernetes_autoscaler" {
   type        = any
   description = "Kubernetes Autoscaler Configuration"
-  
+
 }
 
 
 variable "eks_autoscaler_policy_doc" {
   type        = any
   description = "EKS Autoscaler Policy Document Configuration"
-  
+
 }
 
 variable "eks_autoscaler_policy" {
