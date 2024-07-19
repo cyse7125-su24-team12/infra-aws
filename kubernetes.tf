@@ -27,7 +27,7 @@ resource "kubernetes_namespace" "namespace1" {
 
 resource "kubernetes_limit_range" "namespace1_limits" {
   depends_on = [kubernetes_namespace.namespace1]
-  provider = kubernetes.kubernetes-eks
+  provider   = kubernetes.kubernetes-eks
   metadata {
     name      = "default-limits"
     namespace = kubernetes_namespace.namespace1.metadata[0].name
@@ -58,7 +58,7 @@ resource "kubernetes_namespace" "namespace2" {
 
 resource "kubernetes_limit_range" "namespace2_limits" {
   depends_on = [kubernetes_namespace.namespace2]
-  provider = kubernetes.kubernetes-eks
+  provider   = kubernetes.kubernetes-eks
   metadata {
     name      = "default-limits"
     namespace = kubernetes_namespace.namespace2.metadata[0].name
@@ -89,7 +89,7 @@ resource "kubernetes_namespace" "namespace3" {
 
 resource "kubernetes_limit_range" "namespace3_limits" {
   depends_on = [kubernetes_namespace.namespace3]
-  provider = kubernetes.kubernetes-eks
+  provider   = kubernetes.kubernetes-eks
   metadata {
     name      = "default-limits"
     namespace = kubernetes_namespace.namespace3.metadata[0].name
@@ -100,7 +100,7 @@ resource "kubernetes_limit_range" "namespace3_limits" {
         cpu    = "1"
         memory = "512Mi"
       }
-      default_request ={
+      default_request = {
         cpu    = "500m"
         memory = "256Mi"
       }
@@ -133,3 +133,30 @@ resource "kubernetes_namespace" "namespace_autoscaler" {
     name = var.namespace_autoscaler
   }
 }
+
+resource "kubernetes_secret" "dockerhub_secret" {
+  depends_on = [module.eks]
+  provider   = kubernetes.kubernetes-eks
+  metadata {
+    name      = "dockerhub-secret"
+    namespace = var.namespace_autoscaler
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "${var.docker_hub_registry}" = {
+          "username" = var.docker_hub_username
+          "password" = var.docker_hub_password
+          "email"    = var.docker_hub_email
+          "auth"     = base64encode("${var.docker_hub_username}:${var.docker_hub_password}")
+        }
+      }
+    })
+
+    # {"auths":{"https://index.docker.io/v1/":{"username":"bala699","password":"dckr_pat_5utG2b-cyCm7VveERHQMmiTRXfs","email":"ubalasubramanian03@gmail.com","auth":"bala699:dckr_pat_5utG2b-cyCm7VveERHQMmiTRXfs"}}}
+  }
+}
+
+# {"auths":{"https://index.docker.io/v1/":{"auth":"\"bala699:dckr_pat_5utG2b-cyCm7VveERHQMmiTRXfs\"","email":"ubalasubramanian03@gmail.com","password":"dckr_pat_5utG2b-cyCm7VveERHQMmiTRXfs","username":"bala699"}}}

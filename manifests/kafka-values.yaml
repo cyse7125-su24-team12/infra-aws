@@ -1,0 +1,22 @@
+provisioning:
+  enabled: true
+  topics:
+    - name: cve
+      partitions: 3
+      replicationFactor: 3
+
+controller:
+  initContainerResources:
+    limits:
+      cpu: "500m"
+      memory: "1024Mi"
+    requests:
+      cpu: "200m"
+      memory: "512Mi"
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "2048Mi"
+    requests:
+      cpu: "200m"
+      memory: "1024Mi"

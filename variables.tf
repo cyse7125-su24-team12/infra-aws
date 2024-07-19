@@ -197,3 +197,44 @@ variable "eks_autoscaler_policy" {
   type        = any
   description = "EKS Autoscaler Policy Configuration"
 }
+
+variable "github_username" {
+  type        = string
+  description = "Github Username"
+}
+variable "github_pat" {
+  type        = string
+  description = "Github Personal Access"
+}
+
+variable "github_chart_url" {
+  type        = string
+  description = "Github Chart URL"
+}
+
+variable "docker_hub_registry" {
+  type        = string
+  description = "Docker Hub Registry"
+}
+
+variable "docker_hub_username" {
+  type        = string
+  description = "Docker Hub Username"
+
+}
+
+variable "docker_hub_password" {
+  type        = string
+  description = "Docker Hub Password"
+}
+
+variable "docker_hub_email" {
+  type        = string
+  description = "Docker Hub Email"
+}
+
+variable "autoscaler_config" {
+  type        = any
+  description = "Autoscaler Configuration"
+
+}
