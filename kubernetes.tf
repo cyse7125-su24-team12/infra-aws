@@ -134,6 +134,28 @@ resource "kubernetes_namespace" "namespace_autoscaler" {
   }
 }
 
+ resource "kubernetes_limit_range" "namespace_autoscaler_limits" {
+  depends_on = [kubernetes_namespace.namespace_autoscaler]
+  provider   = kubernetes.kubernetes-eks
+  metadata {
+    name      = "default-limits"
+    namespace = kubernetes_namespace.namespace_autoscaler.metadata[0].name
+  }
+  spec {
+    limit {
+      default = {
+        cpu    = "1"
+        memory = "512Mi"
+      }
+      default_request = {
+        cpu    = "500m"
+        memory = "256Mi"
+      }
+      type = "Container"
+    }
+  }
+}
+
 resource "kubernetes_secret" "dockerhub_secret" {
   depends_on = [module.eks]
   provider   = kubernetes.kubernetes-eks
