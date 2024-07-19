@@ -1,5 +1,5 @@
 fullnameOverride: "cve-webapp-db"
-service: 
+service:
   type: "LoadBalancer"
 
 persistance:
@@ -8,16 +8,17 @@ persistance:
 
 postgresql:
   username: "cve_user"
-  password: "cve123"
+  password: base64encodedpassword
   database: "cve"
   repmgrUsername: "repmgr"
-  repmgrPassword: "repmgr123"
-  podLabels: 
+  repmgrPassword: base64encodedpassword
+
+  podLabels:
     networkLabel: "db"
-  networkPolicy: 
+  networkPolicy:
     enabled: true
     allowExternal: false
-    extraIngress: 
+    extraIngress:
       - from:
           - podSelector:
               matchLabels:
@@ -25,17 +26,25 @@ postgresql:
           - namespaceSelector:
               matchLabels:
                 namespace: namespace3
-      
+  resources:
+    requests:
+      cpu: "300m"
+      memory: "512Mi"
+      ephemeral-storage: "50Mi"
+    limits:
+      cpu: "500m"
+      memory: "1024Mi"
+      ephemeral-storage: "2Gi"
 
 pgpool:
   adminUsername: "pgpool"
-  adminPassword: "admin123"
-  podLabels: 
+  adminPassword: "base64encodedpassword"
+  podLabels:
     networkLabel: "db"
-  networkPolicy: 
+  networkPolicy:
     enabled: true
     allowExternal: false
-    extraIngress: 
+    extraIngress:
       - from:
           - podSelector:
               matchLabels:
@@ -43,3 +52,12 @@ pgpool:
           - namespaceSelector:
               matchLabels:
                 namespace: namespace3
+  resources:
+    requests:
+      cpu: "300m"
+      memory: "512Mi"
+      ephemeral-storage: "50Mi"
+    limits:
+      cpu: "500m"
+      memory: "1024Mi"
+      ephemeral-storage: "2Gi"

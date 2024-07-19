@@ -8,14 +8,14 @@ provider "helm" {
 }
 
 resource "helm_release" "kubernetes-autoscaler" {
-  name       = "kubernetes-autoscaler"
-  repository = "https://kubernetes.github.io/autoscaler"
-  provider   = helm.helm-eks
-  chart      = "cluster-autoscaler"
-  depends_on = [aws_iam_role.eks_autoscaler_role, kubernetes_namespace.namespace_autoscaler, module.eks]
-  # chart      = "autoscaler/cluster-autoscaler"
-  namespace = var.namespace_autoscaler
-
+  name                = "kubernetes-autoscaler"
+  provider            = helm.helm-eks
+  depends_on          = [aws_iam_role.eks_autoscaler_role, kubernetes_namespace.namespace_autoscaler, module.eks, kubernetes_secret.dockerhub_secret]
+  repository          = var.github_chart_url
+  chart               = "../helm-eks-autoscaler"
+  repository_username = var.github_username
+  repository_password = var.github_pat
+  namespace           = var.namespace_autoscaler
   set {
     name  = "autoDiscovery.clusterName"
     value = var.kubernetes_autoscaler.cluster_name
@@ -35,6 +35,20 @@ resource "helm_release" "kubernetes-autoscaler" {
     name  = "rbac.serviceAccount.name"
     value = var.kubernetes_autoscaler.service_account_name
   }
+
+  set {
+    name  = "image.repository"
+    value = var.autoscaler_config.image.repository
+  }
+  set {
+    name  = "image.tag"
+    value = var.autoscaler_config.image.tag
+  }
+
+  set {
+    name  = "image.pullSecrets[0]"
+    value = kubernetes_secret.dockerhub_secret.metadata[0].name
+  }
 }
 
 resource "helm_release" "postgresql-ha-release" {
@@ -45,7 +59,7 @@ resource "helm_release" "postgresql-ha-release" {
   depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3]
   namespace  = var.postgres_ha.namespace
   values = [
-    "${file("manifests/values.yaml")}"
+    "${file("manifests/postgres-values.yaml")}"
   ]
 }
 
@@ -56,23 +70,7 @@ resource "helm_release" "kafka" {
   chart      = "kafka"
   depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3]
   namespace  = var.kafka_config.namespace
-
-  set {
-    name  = "provisioning.enabled"
-    value = var.kafka_config.provisionEnabled
-  }
-  set {
-    name  = "provisioning.topics[0].name"
-    value = var.kafka_config.topicName
-  }
-  set {
-    name = "provisioning.topics[0].partitions"
-    # value = "3"
-    value = var.kafka_config.topicPartitions
-  }
-  set {
-    name = "provisioning.topics[0].replicationFactor"
-    # value = "3"
-    value = var.kafka_config.topicPartitions
-  }
+  values = [
+    "${file("manifests/kafka-values.yaml")}"
+  ]
 }
