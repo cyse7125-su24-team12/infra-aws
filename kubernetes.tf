@@ -134,7 +134,7 @@ resource "kubernetes_namespace" "namespace_autoscaler" {
   }
 }
 
- resource "kubernetes_limit_range" "namespace_autoscaler_limits" {
+resource "kubernetes_limit_range" "namespace_autoscaler_limits" {
   depends_on = [kubernetes_namespace.namespace_autoscaler]
   provider   = kubernetes.kubernetes-eks
   metadata {
