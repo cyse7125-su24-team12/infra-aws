@@ -176,9 +176,37 @@ resource "kubernetes_secret" "dockerhub_secret" {
         }
       }
     })
-
-    # {"auths":{"https://index.docker.io/v1/":{"username":"bala699","password":"dckr_pat_5utG2b-cyCm7VveERHQMmiTRXfs","email":"ubalasubramanian03@gmail.com","auth":"bala699:dckr_pat_5utG2b-cyCm7VveERHQMmiTRXfs"}}}
   }
 }
 
-# {"auths":{"https://index.docker.io/v1/":{"auth":"\"bala699:dckr_pat_5utG2b-cyCm7VveERHQMmiTRXfs\"","email":"ubalasubramanian03@gmail.com","password":"dckr_pat_5utG2b-cyCm7VveERHQMmiTRXfs","username":"bala699"}}}
+resource "kubernetes_namespace" "cve_operator" {
+  depends_on = [module.eks, module.ebs_csi_irsa_role]
+  provider   = kubernetes.kubernetes-eks
+
+  metadata {
+    name = "cve-operator"
+  }
+}
+
+resource "kubernetes_secret" "dockerhub_secret_cve_operator" {
+  depends_on = [module.eks]
+  provider   = kubernetes.kubernetes-eks
+  metadata {
+    name      = "docker-secret"
+    namespace = kubernetes_namespace.cve_operator.metadata[0].name
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "${var.docker_hub_registry}" = {
+          "username" = var.docker_hub_username
+          "password" = var.docker_hub_password
+          "email"    = var.docker_hub_email
+          "auth"     = base64encode("${var.docker_hub_username}:${var.docker_hub_password}")
+        }
+      }
+    })
+  }
+}
