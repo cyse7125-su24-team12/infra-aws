@@ -7,15 +7,34 @@ provider "helm" {
   alias = "helm-eks"
 }
 
+resource "null_resource" "download_asset" {
+  provisioner "local-exec" {
+    command = <<EOT
+#!/bin/bash
+
+# Variables passed from Terraform
+GITHUB_TOKEN="${var.github_pat}"
+ASSET_URL="${var.autoscaler_config.asset_url}"
+OUTPUT_FILE="${path.module}/asset.tgz"
+
+# Download the asset using the asset URL
+curl -L \
+  -H "Accept: application/octet-stream" \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -o $OUTPUT_FILE \
+  $ASSET_URL
+
+echo "Downloaded the asset to $OUTPUT_FILE"
+EOT
+  }
+}
+
 resource "helm_release" "kubernetes-autoscaler" {
-  name                = "kubernetes-autoscaler"
-  provider            = helm.helm-eks
-  depends_on          = [aws_iam_role.eks_autoscaler_role, kubernetes_namespace.namespace_autoscaler, module.eks, kubernetes_secret.dockerhub_secret]
-  repository          = var.github_chart_url
-  chart               = "../helm-eks-autoscaler"
-  repository_username = var.github_username
-  repository_password = var.github_pat
-  namespace           = var.namespace_autoscaler
+  name       = "kubernetes-autoscaler"
+  provider   = helm.helm-eks
+  depends_on = [aws_iam_role.eks_autoscaler_role, kubernetes_namespace.namespace_autoscaler, module.eks, kubernetes_secret.dockerhub_secret, null_resource.download_asset]
+  chart = "${path.module}/asset.tgz"
+  namespace = var.namespace_autoscaler
   set {
     name  = "autoDiscovery.clusterName"
     value = var.kubernetes_autoscaler.cluster_name
@@ -56,7 +75,9 @@ resource "helm_release" "postgresql-ha-release" {
   repository = "https://charts.bitnami.com/bitnami"
   provider   = helm.helm-eks
   chart      = "postgresql-ha"
-  depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3]
+  depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
+  helm_release.kubernetes-autoscaler
+  ]
   namespace  = var.postgres_ha.namespace
   values = [
     "${file("manifests/postgres-values.yaml")}"
@@ -68,7 +89,9 @@ resource "helm_release" "kafka" {
   repository = "https://charts.bitnami.com/bitnami"
   provider   = helm.helm-eks
   chart      = "kafka"
-  depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3]
+  depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
+  helm_release.kubernetes-autoscaler
+  ]
   namespace  = var.kafka_config.namespace
   values = [
     "${file("manifests/kafka-values.yaml")}"

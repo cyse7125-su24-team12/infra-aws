@@ -38,3 +38,12 @@ terraform.rc
 
 # ignore network policy
 networkpolicy_db.yaml
+
+# .tgz files
+*.tgz
+
+# ignore DS_Store
+.DS_Store
+
+# helm fetch script
+helm_fetch.sh
