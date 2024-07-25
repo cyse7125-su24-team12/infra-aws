@@ -33,8 +33,8 @@ resource "helm_release" "kubernetes-autoscaler" {
   name       = "kubernetes-autoscaler"
   provider   = helm.helm-eks
   depends_on = [aws_iam_role.eks_autoscaler_role, kubernetes_namespace.namespace_autoscaler, module.eks, kubernetes_secret.dockerhub_secret, null_resource.download_asset]
-  chart = "${path.module}/asset.tgz"
-  namespace = var.namespace_autoscaler
+  chart      = "${path.module}/asset.tgz"
+  namespace  = var.namespace_autoscaler
   set {
     name  = "autoDiscovery.clusterName"
     value = var.kubernetes_autoscaler.cluster_name
@@ -76,9 +76,9 @@ resource "helm_release" "postgresql-ha-release" {
   provider   = helm.helm-eks
   chart      = "postgresql-ha"
   depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
-  helm_release.kubernetes-autoscaler
+    helm_release.kubernetes-autoscaler
   ]
-  namespace  = var.postgres_ha.namespace
+  namespace = var.postgres_ha.namespace
   values = [
     "${file("manifests/postgres-values.yaml")}"
   ]
@@ -90,9 +90,9 @@ resource "helm_release" "kafka" {
   provider   = helm.helm-eks
   chart      = "kafka"
   depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
-  helm_release.kubernetes-autoscaler
+    helm_release.kubernetes-autoscaler
   ]
-  namespace  = var.kafka_config.namespace
+  namespace = var.kafka_config.namespace
   values = [
     "${file("manifests/kafka-values.yaml")}"
   ]
