@@ -233,3 +233,5 @@ resource "kubernetes_limit_range" "namespace_cve_operator_limits" {
     }
   }
 }
+
+
