@@ -210,3 +210,26 @@ resource "kubernetes_secret" "dockerhub_secret_cve_operator" {
     })
   }
 }
+
+
+resource "kubernetes_limit_range" "namespace_cve_operator_limits" {
+  depends_on = [kubernetes_namespace.cve_operator]
+  provider   = kubernetes.kubernetes-eks
+  metadata {
+    name      = "default-limits"
+    namespace = kubernetes_namespace.cve_operator.metadata[0].name
+  }
+  spec {
+    limit {
+      default = {
+        cpu    = "1"
+        memory = "512Mi"
+      }
+      default_request = {
+        cpu    = "500m"
+        memory = "256Mi"
+      }
+      type = "Container"
+    }
+  }
+}
