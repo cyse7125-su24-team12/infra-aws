@@ -72,6 +72,24 @@ module "eks" {
       # node_security_group_id = aws_security_group.eks_cluster_sg.id
     }
   }
+  node_security_group_additional_rules = {
+    ingress_15017 = {
+      description                   = "Cluster API - Istio Webhook namespace.sidecar-injector.istio.io"
+      protocol                      = "TCP"
+      from_port                     = 15017
+      to_port                       = 15017
+      type                          = "ingress"
+      source_cluster_security_group = true
+    }
+    ingress_15012 = {
+      description                   = "Cluster API to nodes ports/protocols"
+      protocol                      = "TCP"
+      from_port                     = 15012
+      to_port                       = 15012
+      type                          = "ingress"
+      source_cluster_security_group = true
+    }
+  }
   # create_kms_key = false
   # cluster_encryption_config = {
   #   provider_key_arn = aws_kms_key.key_for_eks_cluster.arn

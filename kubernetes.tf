@@ -22,6 +22,9 @@ resource "kubernetes_namespace" "namespace1" {
   provider   = kubernetes.kubernetes-eks
   metadata {
     name = "namespace1"
+    labels = {
+      "istio-injection" = "enabled"
+    }
   }
 }
 
@@ -53,6 +56,9 @@ resource "kubernetes_namespace" "namespace2" {
 
   metadata {
     name = "namespace2"
+    labels = {
+      "istio-injection" = "enabled"
+    }
   }
 }
 
@@ -84,6 +90,9 @@ resource "kubernetes_namespace" "namespace3" {
 
   metadata {
     name = "namespace3"
+    labels = {
+      "istio-injection" = "enabled"
+    }
   }
 }
 
@@ -185,6 +194,9 @@ resource "kubernetes_namespace" "cve_operator" {
 
   metadata {
     name = "cve-operator"
+    labels = {
+      "istio-injection" = "enabled"
+    }
   }
 }
 
@@ -263,4 +275,13 @@ resource "kubernetes_limit_range" "namespace_amazon_cloudwatch_limits" {
       type = "Container"
     }
   }
+}
+resource "kubernetes_namespace" "namespace_istio" {
+  depends_on = [module.eks, module.ebs_csi_irsa_role]
+  provider   = kubernetes.kubernetes-eks
+
+  metadata {
+    name = "istio-system"
+  }
+  
 }
