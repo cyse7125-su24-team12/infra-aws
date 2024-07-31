@@ -234,4 +234,33 @@ resource "kubernetes_limit_range" "namespace_cve_operator_limits" {
   }
 }
 
+resource "kubernetes_namespace" "amazon_cloudwatch" {
+  depends_on = [module.eks, module.ebs_csi_irsa_role]
+  provider   = kubernetes.kubernetes-eks
 
+  metadata {
+    name = "amazon-cloudwatch"
+  }
+}
+
+resource "kubernetes_limit_range" "namespace_amazon_cloudwatch_limits" {
+  depends_on = [kubernetes_namespace.amazon_cloudwatch]
+  provider   = kubernetes.kubernetes-eks
+  metadata {
+    name      = "default-limits"
+    namespace = kubernetes_namespace.amazon_cloudwatch.metadata[0].name
+  }
+  spec {
+    limit {
+      default = {
+        cpu    = "1"
+        memory = "512Mi"
+      }
+      default_request = {
+        cpu    = "500m"
+        memory = "256Mi"
+      }
+      type = "Container"
+    }
+  }
+}
