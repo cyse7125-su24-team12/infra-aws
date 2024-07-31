@@ -89,14 +89,14 @@ resource "helm_release" "istio_base" {
     kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
     helm_release.kubernetes-autoscaler
   ]
-    set {
-    name = "global.istioNamespace"
+  set {
+    name  = "global.istioNamespace"
     value = kubernetes_namespace.namespace_istio.metadata[0].name
-    }
+  }
 }
 
 resource "helm_release" "istio_daemon" {
-  name      = "istio-daemon"
+  name       = "istio-daemon"
   repository = "https://istio-release.storage.googleapis.com/charts"
   provider   = helm.helm-eks
   chart      = "istiod"
@@ -111,7 +111,7 @@ resource "helm_release" "istio_daemon" {
   }
 
   set {
-    name = "meshConfig.ingressSelector.app"
+    name  = "meshConfig.ingressSelector.app"
     value = "istio-gateway"
   }
 
@@ -126,18 +126,18 @@ resource "helm_release" "istio_daemon" {
   # }
 
   set {
-    name = "global.proxy.holdApplicationUntilProxyStarts"
+    name  = "global.proxy.holdApplicationUntilProxyStarts"
     value = "true"
   }
 
   set {
-    name = "global.logAsJson"
+    name  = "global.logAsJson"
     value = "true"
   }
 }
 
 resource "helm_release" "istio_gateway" {
-  name      = "istio-gateway" # should be istio-ingressgateway for defaults of istiod
+  name       = "istio-gateway" # should be istio-ingressgateway for defaults of istiod
   repository = "https://istio-release.storage.googleapis.com/charts"
   provider   = helm.helm-eks
   chart      = "gateway"
@@ -175,7 +175,7 @@ resource "helm_release" "kafka" {
   provider   = helm.helm-eks
   chart      = "kafka"
   depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
-    helm_release.kubernetes-autoscaler,helm_release.istio_base, helm_release.istio_daemon, helm_release.istio_gateway
+    helm_release.kubernetes-autoscaler, helm_release.istio_base, helm_release.istio_daemon, helm_release.istio_gateway
   ]
   namespace = var.kafka_config.namespace
   values = [

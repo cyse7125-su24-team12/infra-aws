@@ -283,5 +283,5 @@ resource "kubernetes_namespace" "namespace_istio" {
   metadata {
     name = "istio-system"
   }
-  
+
 }
