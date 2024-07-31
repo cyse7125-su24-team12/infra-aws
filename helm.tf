@@ -7,6 +7,15 @@ provider "helm" {
   alias = "helm-eks"
 }
 
+resource "helm_release" "fluentbit" {
+  name       = "fluentbit"
+  depends_on = [aws_iam_role.eks_node_role, kubernetes_namespace.amazon_cloudwatch, module.eks]
+  repository = "./helm-charts/"
+  provider   = helm.helm-eks
+  chart      = "fluentbit"
+  namespace  = kubernetes_namespace.amazon_cloudwatch.metadata[0].name
+}
+
 resource "null_resource" "download_asset" {
   provisioner "local-exec" {
     command = <<EOT
