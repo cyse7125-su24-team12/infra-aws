@@ -8,10 +8,10 @@ persistance:
 
 postgresql:
   username: "cve_user"
-  password: base64encodedpassword
+  password: "cve123"
   database: "cve"
   repmgrUsername: "repmgr"
-  repmgrPassword: base64encodedpassword
+  repmgrPassword: "repmgr123"
 
   podLabels:
     networkLabel: "db"
@@ -27,6 +27,11 @@ postgresql:
           - namespaceSelector:
               matchLabels:
                 namespace: namespace3
+      - from:
+          - podSelector:
+              matchLabels:
+                pg-network-policy: "true"
+          - namespaceSelector: {}
   resources:
     requests:
       cpu: "300m"
@@ -39,7 +44,7 @@ postgresql:
 
 pgpool:
   adminUsername: "pgpool"
-  adminPassword: "base64encodedpassword"
+  adminPassword: "admin123"
   podLabels:
     networkLabel: "db"
     sidecar.istio.io/inject: "false"
@@ -54,6 +59,11 @@ pgpool:
           - namespaceSelector:
               matchLabels:
                 namespace: namespace3
+      - from:
+          - podSelector:
+              matchLabels:
+                pg-network-policy: "true"
+          - namespaceSelector: {}
   resources:
     requests:
       cpu: "300m"
@@ -63,3 +73,10 @@ pgpool:
       cpu: "500m"
       memory: "1024Mi"
       ephemeral-storage: "2Gi"
+
+metrics: 
+  enabled: true
+  image:
+    repository: prometheuscommunity/postgres-exporter
+    tag: "master"
+    pullPolicy: IfNotPresent

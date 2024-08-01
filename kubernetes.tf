@@ -15,6 +15,7 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster_auth.token
   alias                  = "kubernetes-eks"
   # version                = "~> 1.11"  
+  # insecure = true 
 }
 
 resource "kubernetes_namespace" "namespace1" {
@@ -285,3 +286,74 @@ resource "kubernetes_namespace" "namespace_istio" {
   }
 
 }
+
+resource "kubernetes_namespace" "prometheus_graphana_ns" {
+  depends_on = [module.eks, module.ebs_csi_irsa_role]
+  provider   = kubernetes.kubernetes-eks
+
+  metadata {
+    name = "prometheus-graphana"
+  }
+
+}
+
+resource "kubernetes_manifest" "istio_ingress_gateway" {
+  depends_on = [kubernetes_namespace.namespace_istio, module.eks]
+  provider   = kubernetes.kubernetes-eks
+  # namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  manifest = yamldecode(file("${path.module}/manifests/ingress-gateway.yaml"))
+}
+
+resource "kubernetes_manifest" "virtual_service_grafana" {
+  depends_on = [kubernetes_namespace.prometheus_graphana_ns,kubernetes_manifest.istio_ingress_gateway,module.eks]
+  provider   = kubernetes.kubernetes-eks
+  manifest = yamldecode(file("${path.module}/manifests/virtual-service-grafana.yaml"))
+}
+
+# resource "kubernetes_network_policy" "network_policy" {
+#   provider = kubernetes.kubernetes-eks
+#   for_each = {
+#     for ns, ns_data in var.namespaces : ns => ns_data
+#     if lookup(ns_data, "istio_injection", "disabled") == "enabled"
+#   }
+#   metadata {
+#     name      = "network-policy"
+#     namespace = each.value.name
+#   }
+#   spec {
+#     pod_selector {
+#       match_expressions {
+#         key      = "sidecar.istio.io/inject"
+#         operator = "NotIn"
+#         values   = ["false"]
+#       }
+#     }
+#     ingress {
+#       from {
+#         namespace_selector {}
+#       }
+#       from {
+#         pod_selector {
+#           match_expressions {
+#             key      = "app.kubernetes.io/name"
+#             operator = "In"
+#             values   = ["prometheus", "istiod"]
+#           }
+#         }
+#       }
+#       ports {
+#         protocol = "TCP"
+#         port     = "15090"
+#       }
+#       ports {
+#         protocol = "TCP"
+#         port     = "15020"
+#       }
+#     }
+
+#     egress {}
+#     policy_types = ["Ingress", "Egress"]
+#   }
+
+#   depends_on = [module.eks]
+# }

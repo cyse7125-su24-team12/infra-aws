@@ -44,6 +44,7 @@ resource "helm_release" "kubernetes-autoscaler" {
   depends_on = [aws_iam_role.eks_autoscaler_role, kubernetes_namespace.namespace_autoscaler, module.eks, kubernetes_secret.dockerhub_secret, null_resource.download_asset]
   chart      = "${path.module}/asset.tgz"
   namespace  = var.namespace_autoscaler
+  values     = [file("manifests/autoscaler-values.yaml")]
   set {
     name  = "autoDiscovery.clusterName"
     value = var.kubernetes_autoscaler.cluster_name
@@ -147,6 +148,7 @@ resource "helm_release" "istio_gateway" {
     helm_release.kubernetes-autoscaler, helm_release.istio_base, helm_release.istio_daemon
   ]
 
+  values = ["${file("manifests/helm-istio-gateway-values.yaml")}"]
   set {
     name  = "labels.app"
     value = "istio-gateway"
@@ -180,5 +182,20 @@ resource "helm_release" "kafka" {
   namespace = var.kafka_config.namespace
   values = [
     "${file("manifests/kafka-values.yaml")}"
+  ]
+}
+
+resource "helm_release" "prometheus_graphana" {
+  name       = "graphana-prometheus"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  provider   = helm.helm-eks
+  chart      = "kube-prometheus-stack"
+  namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  depends_on = [
+    kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
+    helm_release.kubernetes-autoscaler, helm_release.istio_base, helm_release.istio_daemon, helm_release.istio_gateway
+  ]
+  values = [
+    "${file("manifests/prometheus-values.yaml")}"
   ]
 }

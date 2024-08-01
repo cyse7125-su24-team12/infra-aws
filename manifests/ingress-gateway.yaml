@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: grafana-gateway
+  # namespace: istio-system
+  namespace: prometheus-graphana
+spec:
+  selector:
+    istio: gateway 
+    # app: app=istio-gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
