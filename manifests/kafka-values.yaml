@@ -33,3 +33,7 @@ controller:
 broker: 
   podAnnotations:
     proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+
+metrics:
+  jmx:
+    enabled: true

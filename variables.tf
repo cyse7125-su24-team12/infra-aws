@@ -238,3 +238,7 @@ variable "autoscaler_config" {
   description = "Autoscaler Configuration"
 
 }
+variable "namespaces" {
+  type        = any
+  description = "Namespaces Configuration"
+}
