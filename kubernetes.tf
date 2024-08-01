@@ -305,9 +305,9 @@ resource "kubernetes_manifest" "istio_ingress_gateway" {
 }
 
 resource "kubernetes_manifest" "virtual_service_grafana" {
-  depends_on = [kubernetes_namespace.prometheus_graphana_ns,kubernetes_manifest.istio_ingress_gateway,module.eks]
+  depends_on = [kubernetes_namespace.prometheus_graphana_ns, kubernetes_manifest.istio_ingress_gateway, module.eks]
   provider   = kubernetes.kubernetes-eks
-  manifest = yamldecode(file("${path.module}/manifests/virtual-service-grafana.yaml"))
+  manifest   = yamldecode(file("${path.module}/manifests/virtual-service-grafana.yaml"))
 }
 
 # resource "kubernetes_network_policy" "network_policy" {
