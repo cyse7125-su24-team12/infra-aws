@@ -220,7 +220,7 @@ resource "helm_release" "external_dns" {
   provider   = helm.helm-eks
   chart      = "external-dns"
   # version    = "1.14.5"
-  namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  namespace = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
   values = [
     "${file("manifests/external-dns-values.yaml")}"
   ]
