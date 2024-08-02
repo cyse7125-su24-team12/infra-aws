@@ -212,3 +212,17 @@ resource "helm_release" "cert_manager" {
     "${file("manifests/cert-manager-values.yaml")}"
   ]
 }
+
+resource "helm_release" "external_dns" {
+  name       = "external-dns"
+  depends_on = [kubernetes_namespace.prometheus_graphana_ns, module.eks]
+  repository = "https://kubernetes-sigs.github.io/external-dns/"
+  provider   = helm.helm-eks
+  chart      = "external-dns"
+  # version    = "1.14.5"
+  namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  values = [
+    "${file("manifests/external-dns-values.yaml")}"
+  ]
+
+}
