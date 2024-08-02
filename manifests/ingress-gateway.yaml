@@ -1,9 +1,11 @@
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
   name: grafana-gateway
   # namespace: istio-system
   namespace: prometheus-graphana
+  # annotations:
+  #   external-dns.alpha.kubernetes.io/hostname: grafana.shyammylai.me
 spec:
   selector:
     istio: gateway 

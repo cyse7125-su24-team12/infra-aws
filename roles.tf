@@ -92,7 +92,15 @@ resource "aws_iam_policy" "route53_policy" {
       },
       {
         "Effect" : "Allow",
-        "Action" : "route53:ListHostedZonesByName",
+        "Action" : ["route53:ListHostedZonesByName",
+          "route53:ListHostedZones",
+          "route53:GetHostedZone",
+          "route53:ChangeResourceRecordSets",
+          "route53:ListResourceRecordSets",
+          "route53:GetChange",
+          "route53:ListTagsForResource"
+
+        ],
         "Resource" : "*"
       }
     ]
@@ -112,8 +120,11 @@ resource "aws_iam_role" "eks_route53_role" {
           "Federated" : "${module.eks.oidc_provider_arn}"
         },
         "Condition" : {
-          "StringEquals" : {
-            "${module.eks.oidc_provider}:sub" : "system:serviceaccount:prometheus-graphana:cert-manager-sa"
+          "StringLike" : {
+            "${module.eks.oidc_provider}:sub" : [
+              "system:serviceaccount:prometheus-graphana:cert-manager-sa",
+              "system:serviceaccount:prometheus-graphana:external-dns-sa"
+            ]
           }
         }
       }
