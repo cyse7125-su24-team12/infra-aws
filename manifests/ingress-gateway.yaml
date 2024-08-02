@@ -1,4 +1,4 @@
-apiVersion: networking.istio.io/v1
+apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: grafana-gateway
@@ -15,3 +15,14 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
+  - port: 
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - grafana.shyammylai.me
+    tls:
+      # httpsRedirect: true
+      mode: SIMPLE
+      credentialName: grafana-cert-tls
+      # credentialName: cert-manager-webhook-ca

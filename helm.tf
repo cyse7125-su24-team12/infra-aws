@@ -138,7 +138,8 @@ resource "helm_release" "istio_daemon" {
 }
 
 resource "helm_release" "istio_gateway" {
-  name       = "istio-gateway" # should be istio-ingressgateway for defaults of istiod
+  name       = "istio-gateway"  # should be istio-ingressgateway for defaults of istiod 
+  # name should be the same what you for kubernetes_service.istio_gateway_service_data 
   repository = "https://istio-release.storage.googleapis.com/charts"
   provider   = helm.helm-eks
   chart      = "gateway"
@@ -197,5 +198,17 @@ resource "helm_release" "prometheus_graphana" {
   ]
   values = [
     "${file("manifests/prometheus-values.yaml")}"
+  ]
+}
+
+resource "helm_release" "cert_manager" {
+  name       = "cert-manager"
+  depends_on = [kubernetes_namespace.cert_manager, module.eks]
+  repository = "./helm-charts/"
+  provider   = helm.helm-eks
+  chart      = "cert-manager"
+  namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  values = [
+    "${file("manifests/cert-manager-values.yaml")}"
   ]
 }
