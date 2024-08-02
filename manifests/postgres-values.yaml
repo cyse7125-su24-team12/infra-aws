@@ -8,10 +8,10 @@ persistance:
 
 postgresql:
   username: "cve_user"
-  password: "cve123"
+  password: "base64encodedpassword"
   database: "cve"
   repmgrUsername: "repmgr"
-  repmgrPassword: "repmgr123"
+  repmgrPassword: "base64encodedpassword"
 
   podLabels:
     networkLabel: "db"
@@ -44,7 +44,7 @@ postgresql:
 
 pgpool:
   adminUsername: "pgpool"
-  adminPassword: "admin123"
+  adminPassword: "base64encodedpassword"
   podLabels:
     networkLabel: "db"
     sidecar.istio.io/inject: "false"

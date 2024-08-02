@@ -5,7 +5,7 @@ metadata:
   namespace: prometheus-graphana
 spec:
   hosts:
-  - "*"  # Or your specific domain
+  - grafana.shyammylai.me  # Or your specific domain
   gateways:
   # - istio-system/grafana-gateway
   - prometheus-graphana/grafana-gateway
@@ -18,3 +18,5 @@ spec:
         host: graphana-prometheus-grafana.prometheus-graphana.svc.cluster.local
         port:
           number: 80
+
+
