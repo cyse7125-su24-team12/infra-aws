@@ -67,7 +67,7 @@ grafana:
         datasource: Prometheus
     postgres:
       postgres-overview:
-        gnetId: 1860
+        gnetId: 9628
         revision: 1
         datasource: Prometheus
  
