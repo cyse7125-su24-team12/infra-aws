@@ -312,38 +312,38 @@ resource "kubernetes_manifest" "istio_ingress_gateway" {
 }
 
 resource "kubernetes_manifest" "virtual_service_grafana" {
-  depends_on = [ module.eks]
+  depends_on = [module.eks]
   provider   = kubernetes.kubernetes-eks
   manifest   = yamldecode(file("${path.module}/manifests/virtual-service-grafana.yaml"))
 }
 
 resource "kubernetes_manifest" "certificate_issuer" {
-  depends_on = [ module.eks,helm_release.cert_manager]
+  depends_on = [module.eks, helm_release.cert_manager]
   provider   = kubernetes.kubernetes-eks
   manifest   = yamldecode(file("${path.module}/manifests/certificate-issuer.yaml"))
 }
 
 
 resource "kubernetes_manifest" "certificate_values" {
-  depends_on = [ module.eks,helm_release.cert_manager,kubernetes_manifest.certificate_issuer]
+  depends_on = [module.eks, helm_release.cert_manager, kubernetes_manifest.certificate_issuer]
   provider   = kubernetes.kubernetes-eks
   manifest   = yamldecode(file("${path.module}/manifests/certificate-values.yaml"))
 }
 
 resource "kubernetes_manifest" "cert_mgr_role" {
-  depends_on = [ module.eks,helm_release.cert_manager]
+  depends_on = [module.eks, helm_release.cert_manager]
   provider   = kubernetes.kubernetes-eks
   manifest   = yamldecode(file("${path.module}/manifests/cert-mgr-role.yaml"))
 }
 
 resource "kubernetes_manifest" "cert_mgr_rolebinding" {
-  depends_on = [ module.eks,helm_release.cert_manager, kubernetes_manifest.cert_mgr_role]
+  depends_on = [module.eks, helm_release.cert_manager, kubernetes_manifest.cert_mgr_role]
   provider   = kubernetes.kubernetes-eks
   manifest   = yamldecode(file("${path.module}/manifests/cert-mgr-rolebinding.yaml"))
 }
 
 data "kubernetes_service" "istio_gateway_service_data" {
-  depends_on = [helm_release.istio_gateway, module.eks,]
+  depends_on = [helm_release.istio_gateway, module.eks, ]
   provider   = kubernetes.kubernetes-eks
   metadata {
     name      = "istio-gateway" # same name as what you give the helm chart for gateway
