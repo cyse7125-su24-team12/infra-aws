@@ -138,7 +138,7 @@ resource "helm_release" "istio_daemon" {
 }
 
 resource "helm_release" "istio_gateway" {
-  name       = "istio-gateway"  # should be istio-ingressgateway for defaults of istiod 
+  name = "istio-gateway" # should be istio-ingressgateway for defaults of istiod 
   # name should be the same what you for kubernetes_service.istio_gateway_service_data 
   repository = "https://istio-release.storage.googleapis.com/charts"
   provider   = helm.helm-eks

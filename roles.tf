@@ -74,56 +74,56 @@ resource "aws_iam_role" "eks_autoscaler_role" {
 resource "aws_iam_policy" "route53_policy" {
   name        = "route53_policy"
   description = "IAM policy for Route53 permissions"
-  policy      = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Action": "route53:GetChange",
-        "Resource": "arn:aws:route53:::change/*"
+        "Effect" : "Allow",
+        "Action" : "route53:GetChange",
+        "Resource" : "arn:aws:route53:::change/*"
       },
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "route53:ChangeResourceRecordSets",
           "route53:ListResourceRecordSets"
         ],
-        "Resource": "arn:aws:route53:::hostedzone/*"
+        "Resource" : "arn:aws:route53:::hostedzone/*"
       },
       {
-        "Effect": "Allow",
-        "Action": "route53:ListHostedZonesByName",
-        "Resource": "*"
+        "Effect" : "Allow",
+        "Action" : "route53:ListHostedZonesByName",
+        "Resource" : "*"
       }
     ]
   })
 }
- 
+
 resource "aws_iam_role" "eks_route53_role" {
   name = "eks_route53_role"
- 
+
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Action": "sts:AssumeRoleWithWebIdentity",
-        "Principal": {
-          "Federated": "${module.eks.oidc_provider_arn}"
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRoleWithWebIdentity",
+        "Principal" : {
+          "Federated" : "${module.eks.oidc_provider_arn}"
         },
-        "Condition": {
-          "StringEquals": {
-            "${module.eks.oidc_provider}:sub": "system:serviceaccount:prometheus-graphana:cert-manager-sa"
+        "Condition" : {
+          "StringEquals" : {
+            "${module.eks.oidc_provider}:sub" : "system:serviceaccount:prometheus-graphana:cert-manager-sa"
           }
         }
       }
     ]
   })
 }
- 
+
 # Attach the Route53 policy to the role
 resource "aws_iam_role_policy_attachment" "route53_policy_attachment" {
-  depends_on = [ aws_iam_role.eks_route53_role, aws_iam_policy.route53_policy ]
+  depends_on = [aws_iam_role.eks_route53_role, aws_iam_policy.route53_policy]
   role       = aws_iam_role.eks_route53_role.name
   policy_arn = aws_iam_policy.route53_policy.arn
 }
