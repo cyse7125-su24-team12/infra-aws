@@ -4,8 +4,8 @@ metadata:
   name: grafana-virtual-service
   namespace: prometheus-graphana
 spec:
-  hosts:
-  - '*'  # Or your specific domain
+  hosts:  # Or your specific domain
+  - grafana.shyammylai.me
   gateways:
   # - istio-system/grafana-gateway
   - prometheus-graphana/grafana-gateway
@@ -13,6 +13,16 @@ spec:
   - match:
     - uri:
         prefix: "/"
+    route:
+    - destination:
+        host: graphana-prometheus-grafana.prometheus-graphana.svc.cluster.local
+        port:
+          number: 80
+  tls:
+  - match:
+    - port: 443
+      sniHosts:
+        - grafana.shyammylai.me
     route:
     - destination:
         host: graphana-prometheus-grafana.prometheus-graphana.svc.cluster.local

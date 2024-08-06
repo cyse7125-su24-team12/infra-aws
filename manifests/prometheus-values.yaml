@@ -37,7 +37,7 @@ prometheus:
 
 
 grafana: 
-  adminPassword: "admin"
+  adminPassword: "base64encodedpassword"
   dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
