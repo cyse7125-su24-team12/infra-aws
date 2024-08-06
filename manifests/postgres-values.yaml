@@ -2,8 +2,8 @@ fullnameOverride: "cve-webapp-db"
 service:
   type: "LoadBalancer"
 
-persistance:
-  storageClass: "ebc-sc"
+persistence:
+  storageClass: "ebs-sc"
   size: "4Gi"
 
 postgresql:
@@ -12,6 +12,11 @@ postgresql:
   database: "cve"
   repmgrUsername: "repmgr"
   repmgrPassword: "base64encodedpassword"
+  extendedConf: |
+    log_destination = 'jsonlog'
+    logging_collector = on
+    log_directory = 'pg_log'
+    log_filename = 'postgresql-%Y-%m-%d_%H%M%S.json'
 
   podLabels:
     networkLabel: "db"
@@ -41,7 +46,14 @@ postgresql:
       cpu: "500m"
       memory: "1024Mi"
       ephemeral-storage: "2Gi"
-
+  # sidecars:
+  #   - name: logforwarder
+  #     image: busybox
+  #     command: ["/bin/sh"]
+  #     args: ["-c", "tail -n+1 -F /opt/bitnami/postgresql/data/pg_log/*.json"]
+  #     volumeMounts:
+  #       - name: postgresql-data
+  #         mountPath: /opt/bitnami/postgresql/data
 pgpool:
   adminUsername: "pgpool"
   adminPassword: "base64encodedpassword"
