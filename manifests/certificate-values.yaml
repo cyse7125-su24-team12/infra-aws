@@ -2,7 +2,8 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: grafana-cert
-  namespace: prometheus-graphana
+  # namespace: prometheus-graphana
+  namespace: istio-system
 spec:
   secretName: grafana-cert-tls
   dnsNames:

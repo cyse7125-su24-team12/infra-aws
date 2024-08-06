@@ -122,8 +122,8 @@ resource "aws_iam_role" "eks_route53_role" {
         "Condition" : {
           "StringLike" : {
             "${module.eks.oidc_provider}:sub" : [
-              "system:serviceaccount:prometheus-graphana:cert-manager-sa",
-              "system:serviceaccount:prometheus-graphana:external-dns-sa"
+              "system:serviceaccount:istio-system:cert-manager-sa",
+              "system:serviceaccount:istio-system:external-dns-sa"
             ]
           }
         }

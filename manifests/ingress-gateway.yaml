@@ -16,13 +16,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "*"
+    - "grafana.shyammylai.me"
   - port: 
       number: 443
       name: https
       protocol: HTTPS
     hosts:
-    - grafana.shyammylai.me
+    - "grafana.shyammylai.me"
     tls:
       # httpsRedirect: true
       mode: SIMPLE

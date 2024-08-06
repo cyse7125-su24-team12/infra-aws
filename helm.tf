@@ -164,7 +164,7 @@ resource "helm_release" "postgresql-ha-release" {
   provider   = helm.helm-eks
   chart      = "postgresql-ha"
   depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
-    helm_release.kubernetes-autoscaler
+    helm_release.kubernetes-autoscaler,kubernetes_storage_class.pvc_sc
   ]
   namespace = var.postgres_ha.namespace
   values = [
@@ -204,10 +204,11 @@ resource "helm_release" "prometheus_graphana" {
 resource "helm_release" "cert_manager" {
   name       = "cert-manager"
   depends_on = [kubernetes_namespace.cert_manager, module.eks]
-  repository = "./helm-charts/"
+  repository = "https://charts.jetstack.io"
   provider   = helm.helm-eks
   chart      = "cert-manager"
-  namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  # namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  namespace = kubernetes_namespace.namespace_istio.metadata[0].name
   values = [
     "${file("manifests/cert-manager-values.yaml")}"
   ]
@@ -220,7 +221,7 @@ resource "helm_release" "external_dns" {
   provider   = helm.helm-eks
   chart      = "external-dns"
   # version    = "1.14.5"
-  namespace = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  namespace = kubernetes_namespace.namespace_istio.metadata[0].name
   values = [
     "${file("manifests/external-dns-values.yaml")}"
   ]
