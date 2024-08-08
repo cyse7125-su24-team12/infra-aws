@@ -74,20 +74,20 @@ module "eks" {
   }
   node_security_group_additional_rules = {
     ingress_15017 = {
-      description                   = "Cluster API - Istio Webhook namespace.sidecar-injector.istio.io"
-      protocol                      = "TCP"
-      from_port                     = 15017
-      to_port                       = 15017
-      type                          = "ingress"
-      source_cluster_security_group = true
+      description                   = var.node_security_group_additional_rules["ingress_15017"]["description"]
+      protocol                      = var.node_security_group_additional_rules["ingress_15017"]["protocol"]
+      from_port                     = var.node_security_group_additional_rules["ingress_15017"]["from_port"]
+      to_port                       = var.node_security_group_additional_rules["ingress_15017"]["to_port"]
+      type                          = var.node_security_group_additional_rules["ingress_15017"]["type"]
+      source_cluster_security_group = var.node_security_group_additional_rules["ingress_15017"]["source_cluster_security_group"]
     }
     ingress_15012 = {
-      description                   = "Cluster API to nodes ports/protocols"
-      protocol                      = "TCP"
-      from_port                     = 15012
-      to_port                       = 15012
-      type                          = "ingress"
-      source_cluster_security_group = true
+      description                   = var.node_security_group_additional_rules["ingress_15012"]["description"]
+      protocol                      = var.node_security_group_additional_rules["ingress_15012"]["protocol"]
+      from_port                     = var.node_security_group_additional_rules["ingress_15012"]["from_port"]
+      to_port                       = var.node_security_group_additional_rules["ingress_15012"]["to_port"]
+      type                          = var.node_security_group_additional_rules["ingress_15012"]["type"]
+      source_cluster_security_group = var.node_security_group_additional_rules["ingress_15012"]["source_cluster_security_group"]
     }
   }
   # create_kms_key = false

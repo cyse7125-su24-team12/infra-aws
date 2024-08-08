@@ -186,12 +186,12 @@ resource "helm_release" "kafka" {
   ]
 }
 
-resource "helm_release" "prometheus_graphana" {
-  name       = "graphana-prometheus"
+resource "helm_release" "prometheus_grafana" {
+  name       = "grafana-prometheus"
   repository = "https://prometheus-community.github.io/helm-charts"
   provider   = helm.helm-eks
   chart      = "kube-prometheus-stack"
-  namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  namespace  = kubernetes_namespace.prometheus_grafana_ns.metadata[0].name
   depends_on = [
     kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
     helm_release.kubernetes-autoscaler, helm_release.istio_base, helm_release.istio_daemon, helm_release.istio_gateway
@@ -207,7 +207,7 @@ resource "helm_release" "cert_manager" {
   repository = "https://charts.jetstack.io"
   provider   = helm.helm-eks
   chart      = "cert-manager"
-  # namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+  # namespace  = kubernetes_namespace.prometheus_grafana_ns.metadata[0].name
   namespace = kubernetes_namespace.namespace_istio.metadata[0].name
   values = [
     "${file("manifests/cert-manager-values.yaml")}"
@@ -216,7 +216,7 @@ resource "helm_release" "cert_manager" {
 
 resource "helm_release" "external_dns" {
   name       = "external-dns"
-  depends_on = [kubernetes_namespace.prometheus_graphana_ns, module.eks]
+  depends_on = [kubernetes_namespace.prometheus_grafana_ns, module.eks]
   repository = "https://kubernetes-sigs.github.io/external-dns/"
   provider   = helm.helm-eks
   chart      = "external-dns"

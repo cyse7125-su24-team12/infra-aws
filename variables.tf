@@ -242,3 +242,18 @@ variable "namespaces" {
   type        = any
   description = "Namespaces Configuration"
 }
+
+variable "namespace_istio_system" {
+  type        = string
+  description = "Namespace Istio System"
+}
+
+variable "sa_cert_manager" {
+  type        = string
+  description = "Service account for cert manager"
+}
+
+variable "sa_external_dns" {
+  type        = string
+  description = "Service account for external dns"
+}

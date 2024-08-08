@@ -3,28 +3,28 @@ kind: Gateway
 metadata:
   name: grafana-gateway
   # namespace: istio-system
-  namespace: prometheus-graphana
+  namespace: prometheus-grafana
   # annotations:
   #   external-dns.alpha.kubernetes.io/hostname: grafana.shyammylai.me
 spec:
   selector:
-    istio: gateway 
+    istio: gateway
     # app: app=istio-gateway
   servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "grafana.shyammylai.me"
-  - port: 
-      number: 443
-      name: https
-      protocol: HTTPS
-    hosts:
-    - "grafana.shyammylai.me"
-    tls:
-      # httpsRedirect: true
-      mode: SIMPLE
-      credentialName: grafana-cert-tls
-      # credentialName: cert-manager-webhook-ca
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "grafana.shyammylai.me"
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - "grafana.shyammylai.me"
+      tls:
+        # httpsRedirect: true
+        mode: SIMPLE
+        credentialName: grafana-cert-tls
+        # credentialName: cert-manager-webhook-ca

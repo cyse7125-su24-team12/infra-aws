@@ -287,12 +287,12 @@ resource "kubernetes_namespace" "namespace_istio" {
 
 }
 
-resource "kubernetes_namespace" "prometheus_graphana_ns" {
+resource "kubernetes_namespace" "prometheus_grafana_ns" {
   depends_on = [module.eks, module.ebs_csi_irsa_role]
   provider   = kubernetes.kubernetes-eks
 
   metadata {
-    name = "prometheus-graphana"
+    name = "prometheus-grafana"
   }
 }
 
@@ -307,7 +307,7 @@ resource "kubernetes_namespace" "cert_manager" {
 # resource "kubernetes_manifest" "istio_ingress_gateway" {
 #   depends_on = [module.eks]
 #   provider   = kubernetes.kubernetes-eks
-#   # namespace  = kubernetes_namespace.prometheus_graphana_ns.metadata[0].name
+#   # namespace  = kubernetes_namespace.prometheus_grafana_ns.metadata[0].name
 #   manifest = yamldecode(file("${path.module}/manifests/ingress-gateway.yaml"))
 # }
 
