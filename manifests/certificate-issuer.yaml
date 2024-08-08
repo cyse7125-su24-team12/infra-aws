@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: letsencrypt-prod
-  # namespace: prometheus-graphana
+  # namespace: prometheus-grafana
   namespace: istio-system
 spec:
   acme:
@@ -12,15 +12,14 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
-    - selector:
-        dnsZones:
-          - "shyammylai.me"
-      dns01:
-        route53:
-          region: us-east-1
-          role: arn:aws:iam::851725214337:role/eks_route53_role
-          auth:
-            kubernetes:
-              serviceAccountRef:
-                name: cert-manager-sa
- 
+      - selector:
+          dnsZones:
+            - "shyammylai.me"
+        dns01:
+          route53:
+            region: us-east-1
+            role: arn:aws:iam::851725214337:role/eks_route53_role
+            auth:
+              kubernetes:
+                serviceAccountRef:
+                  name: cert-manager-sa

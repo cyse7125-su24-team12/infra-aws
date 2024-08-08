@@ -122,8 +122,8 @@ resource "aws_iam_role" "eks_route53_role" {
         "Condition" : {
           "StringLike" : {
             "${module.eks.oidc_provider}:sub" : [
-              "system:serviceaccount:istio-system:cert-manager-sa",
-              "system:serviceaccount:istio-system:external-dns-sa"
+              "system:serviceaccount:${var.namespace_istio_system}:${var.sa_cert_manager}",
+              "system:serviceaccount:${var.namespace_istio_system}:${var.sa_external_dns}",
             ]
           }
         }
