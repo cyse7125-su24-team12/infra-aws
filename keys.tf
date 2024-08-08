@@ -104,10 +104,10 @@ resource "aws_kms_key" "key_for_ebs_volume" {
         Principal = {
           # AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.ebs_csi_irsa_role.iam_role_name}",
 
-            AWS = [
-              "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.eks_node_role.name}",
-              "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.ebs_csi_irsa_role.iam_role_name}"
-            ]
+          AWS = [
+            "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.eks_node_role.name}",
+            "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.ebs_csi_irsa_role.iam_role_name}"
+          ]
         },
         Action   = var.key_for_ebs_volume.policy.Statement[2].Action,
         Resource = var.key_for_ebs_volume.policy.Statement[2].Resource
