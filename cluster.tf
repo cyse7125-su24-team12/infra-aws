@@ -74,20 +74,20 @@ module "eks" {
   }
   node_security_group_additional_rules = {
     ingress_15017 = {
-      description                   = var.node_security_group_additional_rules["ingress_15017"]["description"]
-      protocol                      = var.node_security_group_additional_rules["ingress_15017"]["protocol"]
-      from_port                     = var.node_security_group_additional_rules["ingress_15017"]["from_port"]
-      to_port                       = var.node_security_group_additional_rules["ingress_15017"]["to_port"]
-      type                          = var.node_security_group_additional_rules["ingress_15017"]["type"]
-      source_cluster_security_group = var.node_security_group_additional_rules["ingress_15017"]["source_cluster_security_group"]
+      description                   = var.cluster_eks["node_security_group_additional_rules"]["ingress_15017"]["description"]
+      protocol                      = var.cluster_eks["node_security_group_additional_rules"]["ingress_15017"]["protocol"]
+      from_port                     = var.cluster_eks["node_security_group_additional_rules"]["ingress_15017"]["from_port"]
+      to_port                       = var.cluster_eks["node_security_group_additional_rules"]["ingress_15017"]["to_port"]
+      type                          = var.cluster_eks["node_security_group_additional_rules"]["ingress_15017"]["type"]
+      source_cluster_security_group = var.cluster_eks["node_security_group_additional_rules"]["ingress_15017"]["source_cluster_security_group"]
     }
     ingress_15012 = {
-      description                   = var.node_security_group_additional_rules["ingress_15012"]["description"]
-      protocol                      = var.node_security_group_additional_rules["ingress_15012"]["protocol"]
-      from_port                     = var.node_security_group_additional_rules["ingress_15012"]["from_port"]
-      to_port                       = var.node_security_group_additional_rules["ingress_15012"]["to_port"]
-      type                          = var.node_security_group_additional_rules["ingress_15012"]["type"]
-      source_cluster_security_group = var.node_security_group_additional_rules["ingress_15012"]["source_cluster_security_group"]
+      description                   = var.cluster_eks["node_security_group_additional_rules"]["ingress_15012"]["description"]
+      protocol                      = var.cluster_eks["node_security_group_additional_rules"]["ingress_15012"]["protocol"]
+      from_port                     = var.cluster_eks["node_security_group_additional_rules"]["ingress_15012"]["from_port"]
+      to_port                       = var.cluster_eks["node_security_group_additional_rules"]["ingress_15012"]["to_port"]
+      type                          = var.cluster_eks["node_security_group_additional_rules"]["ingress_15012"]["type"]
+      source_cluster_security_group = var.cluster_eks["node_security_group_additional_rules"]["ingress_15012"]["source_cluster_security_group"]
     }
   }
   # create_kms_key = false
