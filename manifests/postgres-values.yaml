@@ -12,11 +12,6 @@ postgresql:
   database: "cve"
   repmgrUsername: "repmgr"
   repmgrPassword: "base64encodedpassword"
-  extendedConf: |
-    log_destination = 'jsonlog'
-    logging_collector = on
-    log_directory = 'pg_log'
-    log_filename = 'postgresql-%Y-%m-%d_%H%M%S.json'
 
   podLabels:
     networkLabel: "db"
@@ -56,7 +51,7 @@ postgresql:
   #         mountPath: /opt/bitnami/postgresql/data
 pgpool:
   adminUsername: "pgpool"
-  adminPassword: "base64encodedpassword"
+  adminPassword: "admin123"
   podLabels:
     networkLabel: "db"
     sidecar.istio.io/inject: "false"
