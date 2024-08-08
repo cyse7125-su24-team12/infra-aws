@@ -164,7 +164,7 @@ resource "helm_release" "postgresql-ha-release" {
   provider   = helm.helm-eks
   chart      = "postgresql-ha"
   depends_on = [kubernetes_namespace.namespace1, kubernetes_namespace.namespace2, kubernetes_namespace.namespace3,
-    helm_release.kubernetes-autoscaler,kubernetes_storage_class.pvc_sc
+    helm_release.kubernetes-autoscaler, kubernetes_storage_class.pvc_sc
   ]
   namespace = var.postgres_ha.namespace
   values = [
