@@ -51,7 +51,7 @@ postgresql:
   #         mountPath: /opt/bitnami/postgresql/data
 pgpool:
   adminUsername: "pgpool"
-  adminPassword: "admin123"
+  adminPassword: "base64encodedpassword"
   podLabels:
     networkLabel: "db"
     sidecar.istio.io/inject: "false"

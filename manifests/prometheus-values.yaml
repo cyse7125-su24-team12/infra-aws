@@ -67,10 +67,9 @@ grafana:
         datasource: Prometheus
     postgres:
       postgres-overview:
-        gnetId: 455
+        gnetId: 14114
         revision: 1
         datasource: Prometheus
- 
 
 commonLabels:
   pg-network-policy: "true"

@@ -15,7 +15,7 @@ spec:
             prefix: "/"
       route:
         - destination:
-            host: grafana-prometheus-grafana.prometheus-grafana.svc.cluster.local
+            host: grafana-prometheus.prometheus-grafana.svc.cluster.local
             port:
               number: 80
   tls:
@@ -25,6 +25,6 @@ spec:
             - grafana.shyammylai.me
       route:
         - destination:
-            host: grafana-prometheus-grafana.prometheus-grafana.svc.cluster.local
+            host: grafana-prometheus.prometheus-grafana.svc.cluster.local
             port:
               number: 80
