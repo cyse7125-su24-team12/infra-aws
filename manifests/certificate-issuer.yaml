@@ -6,8 +6,8 @@ metadata:
   namespace: istio-system
 spec:
   acme:
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
-    # server: https://acme-v02.api.letsencrypt.org/directory
+    # server: https://acme-staging-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
     email: ubalasubramanian03@gmail.com
     privateKeySecretRef:
       name: letsencrypt-prod
