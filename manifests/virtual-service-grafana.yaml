@@ -5,12 +5,24 @@ metadata:
   namespace: prometheus-grafana
 spec:
   hosts: # Or your specific domain
-    - grafana.shyammylai.me
+    - shyammylai.me
   gateways:
     # - istio-system/grafana-gateway
     - prometheus-grafana/grafana-gateway
   http:
-    - match:
+    - name: "llm-model"
+      match:
+        - uri:
+            prefix: "/llm"
+      rewrite: 
+        uri: "/"
+      route:
+        - destination:
+            host: webapp-llm.webapp-llm.svc.cluster.local
+            port:
+              number: 80
+    - name: "grafana"       
+      match:
         - uri:
             prefix: "/"
       route:
@@ -18,13 +30,13 @@ spec:
             host: grafana-prometheus.prometheus-grafana.svc.cluster.local
             port:
               number: 80
-  tls:
-    - match:
-        - port: 443
-          sniHosts:
-            - grafana.shyammylai.me
-      route:
-        - destination:
-            host: grafana-prometheus.prometheus-grafana.svc.cluster.local
-            port:
-              number: 80
+  # tls:
+  #   - match:
+  #       - port: 443
+  #         sniHosts:
+  #           - shyammylai.me
+  #     route:
+  #       - destination:
+  #           host: grafana-prometheus.prometheus-grafana.svc.cluster.local
+  #           port:
+  #             number: 80
