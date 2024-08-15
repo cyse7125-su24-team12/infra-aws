@@ -5,7 +5,7 @@ metadata:
   # namespace: istio-system
   namespace: prometheus-grafana
   # annotations:
-  #   external-dns.alpha.kubernetes.io/hostname: grafana.shyammylai.me
+  #   external-dns.alpha.kubernetes.io/hostname: shyammylai.me
 spec:
   selector:
     istio: gateway
@@ -16,13 +16,13 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - "grafana.shyammylai.me"
+        - "shyammylai.me"
     - port:
         number: 443
         name: https
         protocol: HTTPS
       hosts:
-        - "grafana.shyammylai.me"
+        - "shyammylai.me"
       tls:
         # httpsRedirect: true
         mode: SIMPLE
