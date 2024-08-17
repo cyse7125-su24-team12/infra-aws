@@ -5,12 +5,12 @@ metadata:
   namespace: prometheus-grafana
 spec:
   hosts: # Or your specific domain
-    - grafana.shyammylai.me
+    - grafanav1.shyammylai.me
   gateways:
     # - istio-system/grafana-gateway
     - prometheus-grafana/grafana-gateway
   http:
-    - name: "grafana"       
+    - name: "grafana"
       match:
         - uri:
             prefix: "/"

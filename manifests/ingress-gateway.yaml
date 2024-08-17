@@ -16,14 +16,14 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - "grafana.shyammylai.me"
+        - "grafanav1.shyammylai.me"
         - "llm.shyammylai.me"
     - port:
         number: 443
         name: https-grafana
         protocol: HTTPS
       hosts:
-        - "grafana.shyammylai.me"
+        - "grafanav1.shyammylai.me"
       tls:
         mode: SIMPLE
         credentialName: grafana-cert-tls
