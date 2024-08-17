@@ -7,7 +7,7 @@ metadata:
 spec:
   secretName: grafana-cert-tls
   dnsNames:
-    - grafana.shyammylai.me
+    - grafanav1.shyammylai.me
   issuerRef:
     name: grafana-letsencrypt-prod
     kind: Issuer
