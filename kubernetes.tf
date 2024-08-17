@@ -315,6 +315,14 @@ resource "kubernetes_namespace" "llm_namespace" {
   }
 }
 
+resource "kubernetes_namespace" "ollama" {
+  depends_on = [module.eks, module.ebs_csi_irsa_role]
+  provider   = kubernetes.kubernetes-eks
+  metadata {
+    name = "ollama"
+  }
+}
+
 # resource "kubernetes_network_policy" "network_policy" {
 #   provider = kubernetes.kubernetes-eks
 #   for_each = {

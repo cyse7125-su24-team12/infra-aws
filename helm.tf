@@ -227,3 +227,17 @@ resource "helm_release" "external_dns" {
   ]
 
 }
+
+resource "helm_release" "ollam_release" {
+  name       = "ollam-release"
+  repository = "https://otwld.github.io/ollama-helm/"
+  provider   = helm.helm-eks
+  chart      = "ollama"
+  namespace  = kubernetes_namespace.ollama.metadata[0].name
+  depends_on = [
+    kubernetes_namespace.ollama, helm_release.kubernetes-autoscaler, helm_release.istio_base
+  ]
+  values = [
+    "${file("manifests/ollama-helm.yaml")}"
+  ]
+}
