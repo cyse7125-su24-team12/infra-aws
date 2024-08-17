@@ -35,3 +35,9 @@ resource "kubernetes_manifest" "cert_mgr_rolebinding" {
   provider   = kubernetes.kubernetes-eks
   manifest   = yamldecode(file("${path.module}/manifests/cert-mgr-rolebinding.yaml"))
 }
+
+resource "kubernetes_manifest" "virtual_service_llm" {
+  depends_on = [module.eks]
+  provider   = kubernetes.kubernetes-eks
+  manifest   = yamldecode(file("${path.module}/manifests/virtual-service-llm.yaml"))
+}

@@ -71,6 +71,27 @@ module "eks" {
       }
       # node_security_group_id = aws_security_group.eks_cluster_sg.id
     }
+    gpu_nodes = {
+      desired_size    = 1
+      max_size        = 1
+      min_size        = 1
+      instance_types  = ["g5g.xlarge"]
+      create_iam_role = false
+      capacity_type   = "ON_DEMAND"
+
+      # ami_id = "ami-0c5119685a79868ff"
+      ami_type     = "BOTTLEROCKET_ARM_64_NVIDIA"
+      iam_role_arn = aws_iam_role.eks_node_role.arn
+      labels = {
+        "node-type" = "gpu"
+      }
+
+      taints = [{
+        key    = "gpu"
+        value  = "true"
+        effect = "NO_SCHEDULE"
+      }]
+    }
   }
   node_security_group_additional_rules = {
     ingress_15017 = {
