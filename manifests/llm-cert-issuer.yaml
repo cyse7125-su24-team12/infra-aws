@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: grafana-letsencrypt-prod
+  name: llm-letsencrypt-prod
   # namespace: prometheus-grafana
   namespace: istio-system
 spec:
@@ -10,11 +10,11 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     email: ubalasubramanian03@gmail.com
     privateKeySecretRef:
-      name: grafana-letsencrypt-prod
+      name: llm-letsencrypt-prod
     solvers:
       - selector:
           dnsZones:
-            - "grafana.shyammylai.me"
+            - "llm.shyammylai.me"
         dns01:
           route53:
             region: us-east-1

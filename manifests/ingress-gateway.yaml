@@ -20,13 +20,19 @@ spec:
         - "llm.shyammylai.me"
     - port:
         number: 443
-        name: https
+        name: https-grafana
         protocol: HTTPS
       hosts:
         - "grafana.shyammylai.me"
-        - "llm.shyammylai.me"
       tls:
-        # httpsRedirect: true
         mode: SIMPLE
         credentialName: grafana-cert-tls
-        # credentialName: cert-manager-webhook-ca
+    - port:
+        number: 443
+        name: https-llm
+        protocol: HTTPS
+      hosts:
+        - "llm.shyammylai.me"
+      tls:
+        mode: SIMPLE
+        credentialName: llm-cert-tls

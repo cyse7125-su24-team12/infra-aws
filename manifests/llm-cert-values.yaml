@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: grafana-cert
+  name: llm-cert
   # namespace: prometheus-grafana
   namespace: istio-system
 spec:
-  secretName: grafana-cert-tls
+  secretName: llm-cert-tls
   dnsNames:
-    - grafana.shyammylai.me
+    - llm.shyammylai.me
   issuerRef:
-    name: grafana-letsencrypt-prod
+    name: llm-letsencrypt-prod
     kind: Issuer
